@@ -3,7 +3,7 @@
     {% for question in latest_question_list %}
         <!-- 장고 템플릿 언어의 url 함수 사용 시 url 경로들의 의존성 제거 가능
         polls로 접속하던걸 urls.py에서 이름만 바꿔주면 끝 -->
-        <li><a href="{% url 'detail' question.id %}">{{ question.question_text }}</a></li>
+        <li><a href="{% url 'polls:detail' question.id %}">{{ question.question_text }}</a></li>
     {% endfor %}
     </ul>
 {% else %}
