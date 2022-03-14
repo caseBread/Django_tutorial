@@ -1,3 +1,5 @@
+from time import timezone
+
 from django.http import HttpResponse, Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
@@ -18,13 +20,18 @@ class IndexView(generic.ListView):
     # 출력객체를 검색하기 위한 대상 QuerySet객체 또는 출력대상인 객체리스트를 반환 default = queryset속성값 반환
     def get_queryset(self):
         """Return the last five published questions."""
-        return Question.objects.order_by('-pub_date')[:5]
+        return Question.objects.filter(pub_date__lte=timezone.now()).order_by('-pub_date')[:5]
 
 # DetailView = 객체 하나에 대한 상세한 정보 보여주는 generic view
 class DetailView(generic.DetailView):
     model = Question
     template_name = 'polls/detail.html'
 
+    def get_queryset(self):
+        """
+        Excludes any questions that aren't published yet.
+        """
+        return Question.objects.filter(pub_date__lte=timezone.now())
 
 class ResultsView(generic.DetailView):
     model = Question
